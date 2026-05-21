@@ -9,6 +9,8 @@ Rules:
 - Run tests with: pytest -q
 """
 
+from __future__ import annotations
+
 import heapq
 
 
