@@ -31,7 +31,17 @@ def build_hunter_map(edges: list[tuple[str, str]]) -> dict[str, list[str]]:
         - Include every location that appears in the input.
         - Do not duplicate neighbors if the same route appears more than once.
     """
-    raise NotImplementedError
+    graph: dict[str, list[str]] = {}
+    for a, b in edges:
+        if a not in graph:
+            graph[a] = []
+        if b not in graph:
+            graph[b] = []
+        if b not in graph[a]:
+            graph[a].append(b)
+        if a not in graph[b]:
+            graph[b].append(a)
+    return graph
 
 
 def build_weighted_hunter_map(
@@ -54,7 +64,18 @@ def build_weighted_hunter_map(
         - If danger score is 0 or negative, raise ValueError.
         - If the same route appears more than once, keep the lowest score.
     """
-    raise NotImplementedError
+    graph: dict[str, dict[str, int]] = {}
+    for a, b, w in edges:
+        if w <= 0:
+            raise ValueError(f"Danger score must be positive, got {w}")
+        if a not in graph:
+            graph[a] = {}
+        if b not in graph:
+            graph[b] = {}
+        if b not in graph[a] or w < graph[a][b]:
+            graph[a][b] = w
+            graph[b][a] = w
+    return graph
 
 
 def map_summary(graph: dict[str, list[str]]) -> dict[str, int]:
@@ -77,7 +98,10 @@ def map_summary(graph: dict[str, list[str]]) -> dict[str, int]:
 
         returns {"locations": 3, "routes": 2}
     """
-    raise NotImplementedError
+    locations = len(graph)
+    total_edges = sum(len(neighbors) for neighbors in graph.values())
+    routes = total_edges // 2
+    return {"locations": locations, "routes": routes}
 
 
 def most_connected_location(graph: dict[str, list[str]]) -> str | None:
@@ -91,7 +115,9 @@ def most_connected_location(graph: dict[str, list[str]]) -> str | None:
         If the graph is empty, return None.
         If there is a tie, return the alphabetically first location.
     """
-    raise NotImplementedError
+    if not graph:
+        return None
+    return min(graph, key=lambda loc: (-len(graph[loc]), loc))
 
 
 def priority_hunt_order(reports: list[tuple[int, str]]) -> list[str]:
@@ -108,4 +134,6 @@ def priority_hunt_order(reports: list[tuple[int, str]]) -> list[str]:
     Requirement:
         Use heapq.
     """
-    raise NotImplementedError
+    heap = [(priority, location) for priority, location in reports]
+    heapq.heapify(heap)
+    return [heapq.heappop(heap)[1] for _ in range(len(heap))]
