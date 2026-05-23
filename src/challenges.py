@@ -73,7 +73,9 @@ def build_weighted_hunter_map(
         if b not in graph:
             graph[b] = {}
 
-        if b not in graph[a] or weight < graph[a][b]:
+        current_weight = graph[a].get(b)
+
+        if current_weight is None or weight < current_weight:
             graph[a][b] = weight
             graph[b][a] = weight
 
@@ -138,12 +140,12 @@ def priority_hunt_order(
     Requirement:
         Use heapq.
     """
-    heap = []
+    heap: List[Tuple[int, str]] = []
 
     for priority, location in reports:
         heapq.heappush(heap, (priority, location))
 
-    result = []
+    result: List[str] = []
 
     while heap:
         _, location = heapq.heappop(heap)
