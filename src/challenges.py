@@ -10,7 +10,6 @@ Rules:
 """
 
 import heapq
-from __future__ import annotations  
 
 
 def build_hunter_map(edges: list[tuple[str, str]]) -> dict[str, list[str]]:
@@ -146,4 +145,3 @@ def priority_hunt_order(reports: list[tuple[int, str]]) -> list[str]:
     heapq.heapify(heap)
 
     return [heapq.heappop(heap)[1] for _ in range(len(heap))]
-
