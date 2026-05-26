@@ -10,7 +10,7 @@ Rules:
 """
 
 import heapq
-from __future__ import annotations  # Add this at the very top
+from __future__ import annotations  
 
 
 def build_hunter_map(edges: list[tuple[str, str]]) -> dict[str, list[str]]:
